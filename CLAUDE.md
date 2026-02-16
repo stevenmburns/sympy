@@ -26,6 +26,12 @@ pip install -r requirements.txt
 .venv/bin/python -m pytest test_beta_derivatives.py -v
 ```
 
+## Linting
+
+```bash
+ruff check .
+```
+
 ## Architecture
 
 Single-file project (`beta_derivatives.py`):
