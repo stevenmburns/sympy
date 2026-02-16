@@ -8,7 +8,7 @@ B = beta(x, y)
 
 def beta_partial(order_x, order_y):
     """Return the partial derivative d^(m+n) B / dx^m dy^n."""
-    return simplify(diff(B, (x, order_x), (y, order_y)).subs({y: x}))
+    return simplify(diff(B, (x, order_x), (y, order_y)))
 
 
 if __name__ == "__main__":
