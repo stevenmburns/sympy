@@ -1,5 +1,7 @@
 # Beta Function Partial Derivatives
 
+[![CI](https://github.com/stevenmburns/sympy/actions/workflows/ci.yml/badge.svg)](https://github.com/stevenmburns/sympy/actions/workflows/ci.yml)
+
 Symbolic computation of high-order partial derivatives of the [Beta function](https://en.wikipedia.org/wiki/Beta_function) B(x, y) = Γ(x)Γ(y) / Γ(x+y) using SymPy.
 
 ## Setup
