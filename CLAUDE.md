@@ -11,13 +11,19 @@ Symbolic computation of high-order partial derivatives of the Beta function B(x,
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install sympy
+pip install -r requirements.txt
 ```
 
 ## Running
 
 ```bash
 .venv/bin/python beta_derivatives.py
+```
+
+## Testing
+
+```bash
+.venv/bin/python -m pytest test_beta_derivatives.py -v
 ```
 
 ## Architecture

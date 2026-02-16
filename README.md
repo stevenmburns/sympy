@@ -7,7 +7,7 @@ Symbolic computation of high-order partial derivatives of the [Beta function](ht
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install sympy
+pip install -r requirements.txt
 ```
 
 ## Usage
@@ -28,6 +28,12 @@ expr = beta_partial(3, 2)
 
 # Evaluate numerically
 result = float(expr.subs({x: 2, y: 3}))
+```
+
+## Testing
+
+```bash
+pytest test_beta_derivatives.py -v
 ```
 
 ## Output
