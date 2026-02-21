@@ -1,6 +1,6 @@
 import numpy as np
 from scipy import integrate
-from sympy import Symbol, summation, Rational, polygamma, pi, sin, simplify, Float
+from sympy import Symbol, Rational, polygamma, pi, sin, simplify
 
 
 def integrand(x):
@@ -51,8 +51,8 @@ for x in [-2, -5, -10, -20]:
     print(f"{x:>6}  {exact:>20.6e}  {approx:>20.6e}  {abs(approx - exact) / exact:>12.2e}")
 
 print("\nIntegrating asymptotic series term by term:")
-print(f"  ∫_0^∞  ~ sum_n (-1)^n / (2n + 1/5)  = 5 sum_n (-1)^n / (10n + 1)")
-print(f"  ∫_-∞^0 ~ sum_n (-1)^n / (2n + 9/5)  = 5 sum_n (-1)^n / (10n + 9)")
+print("  ∫_0^∞  ~ sum_n (-1)^n / (2n + 1/5)  = 5 sum_n (-1)^n / (10n + 1)")
+print("  ∫_-∞^0 ~ sum_n (-1)^n / (2n + 9/5)  = 5 sum_n (-1)^n / (10n + 9)")
 print(f"\n{'terms':>6}  {'pos half':>16}  {'neg half':>16}  {'total':>16}  {'error':>12}")
 for n in [1, 2, 5, 10, 20, 50, 100]:
     pos, neg = integrate_series(n)
