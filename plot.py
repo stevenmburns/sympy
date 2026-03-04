@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import integrate
+from sympy import sqrt, simplify, Rational
 
 x = np.linspace(0, 2, 1000)
 
