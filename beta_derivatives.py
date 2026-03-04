@@ -2,9 +2,10 @@
 
 from sympy import symbols, beta, diff, simplify, pprint
 
-x, y = symbols('x y')
+x, y = symbols("x y")
 
 B = beta(x, y)
+
 
 def beta_partial(order_x, order_y):
     """Return the partial derivative d^(m+n) B / dx^m dy^n."""
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     # Show derivatives up to 3rd order
     for m, n in ((2, 2), (3, 1)):
         expr = beta_partial(m, n)
-        print(f"d^{m+n}B / dx^{m} dy^{n} =")
+        print(f"d^{m + n}B / dx^{m} dy^{n} =")
         pprint(expr)
         print()
 

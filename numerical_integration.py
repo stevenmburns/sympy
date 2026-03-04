@@ -41,30 +41,38 @@ print(f"{'x':>6}  {'exact':>20}  {'asymptotic':>20}  {'rel error':>12}")
 for x in [2, 5, 10, 20]:
     exact = integrand(x)
     approx = asymptotic_pos_inf(x)
-    print(f"{x:>6}  {exact:>20.6e}  {approx:>20.6e}  {abs(approx - exact) / exact:>12.2e}")
+    print(
+        f"{x:>6}  {exact:>20.6e}  {approx:>20.6e}  {abs(approx - exact) / exact:>12.2e}"
+    )
 
 print("\nAsymptotic expansion vs exact (x -> -inf):")
 print(f"{'x':>6}  {'exact':>20}  {'asymptotic':>20}  {'rel error':>12}")
 for x in [-2, -5, -10, -20]:
     exact = integrand(x)
     approx = asymptotic_neg_inf(x)
-    print(f"{x:>6}  {exact:>20.6e}  {approx:>20.6e}  {abs(approx - exact) / exact:>12.2e}")
+    print(
+        f"{x:>6}  {exact:>20.6e}  {approx:>20.6e}  {abs(approx - exact) / exact:>12.2e}"
+    )
 
 print("\nIntegrating asymptotic series term by term:")
 print("  ∫_0^∞  ~ sum_n (-1)^n / (2n + 1/5)  = 5 sum_n (-1)^n / (10n + 1)")
 print("  ∫_-∞^0 ~ sum_n (-1)^n / (2n + 9/5)  = 5 sum_n (-1)^n / (10n + 9)")
-print(f"\n{'terms':>6}  {'pos half':>16}  {'neg half':>16}  {'total':>16}  {'error':>12}")
+print(
+    f"\n{'terms':>6}  {'pos half':>16}  {'neg half':>16}  {'total':>16}  {'error':>12}"
+)
 for n in [1, 2, 5, 10, 20, 50, 100]:
     pos, neg = integrate_series(n)
     total = pos + neg
-    print(f"{n:>6}  {pos:>16.10f}  {neg:>16.10f}  {total:>16.10f}  {abs(total - result):>12.2e}")
+    print(
+        f"{n:>6}  {pos:>16.10f}  {neg:>16.10f}  {total:>16.10f}  {abs(total - result):>12.2e}"
+    )
 
 # --- Exact closed forms via digamma ---
 # sum_{n=0}^inf (-1)^n / (n + a) = (1/2)[psi((a+1)/2) - psi(a/2)]
 # so sum_{n=0}^inf (-1)^n / (10n + r) = (1/10) * (1/2)[psi((r/10+1)/2) - psi(r/20)]
 
 print("\nExact closed forms:")
-n_sym = Symbol('n', integer=True, nonneg=True)
+n_sym = Symbol("n", integer=True, nonneg=True)
 
 for r, label in [(1, "∫_0^∞"), (9, "∫_-∞^0")]:
     a = Rational(r, 10)
