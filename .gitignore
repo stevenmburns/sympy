@@ -3,3 +3,13 @@ __pycache__/
 .ruff_cache/
 .pytest_cache/
 *.png
+
+# LaTeX build outputs
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.pdf
