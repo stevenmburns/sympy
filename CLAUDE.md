@@ -22,6 +22,7 @@ pip install -r requirements.txt
 .venv/bin/python beta_derivatives.py
 .venv/bin/python numerical_integration.py
 .venv/bin/python arctan_log_integral.py
+.venv/bin/python erf_integral.py
 .venv/bin/python plot.py
 ```
 
@@ -57,6 +58,29 @@ ruff check .
 - Iterated Aitken Δ² acceleration reaches machine precision in 4 passes from 50 raw terms
 - Euler transform does NOT work here (terms not monotonically decreasing); use Aitken
 
+**`erf_integral.py`** — Numerical integration of `e^{-x} sin(x) erf(x)` over [0,∞):
+- IBP with `u = erf(x)` reduces to `(1/√π) ∫₀^∞ e^{-x²-x}(sin x + cos x) dx`
+- Completing the square + complex Gaussian integral identity gives closed form `(1/√2) Im[e^{i(π/4-1/2)} erfc(1/2 - i/2)]`
+- `scipy.special.erf` accepts complex arguments; `erfc(z) = 1 - erf(z)` used directly
+
 **`plot.py`** — Plots `g(x) = ||x³-x| - x²|` over [0,2] with piecewise polynomial fit:
 - Endpoints at golden ratio `φ = (1+√5)/2`; exact integrals expressed in terms of √5
 - Requires `from sympy import sqrt, simplify, Rational`
+
+## Script conventions for new integrals
+
+Each integral script follows a three-layer structure:
+
+1. **Direct numerical reference** — `scipy.integrate.quad` on the raw integrand first. This is the ground truth everything else is checked against.
+
+2. **Analytic reduction** — reduce the integral to a simpler form by hand (IBP, series expansion, substitution, etc.) and verify numerically that the reduced form agrees with layer 1. Show the derivation in the module docstring.
+
+3. **Closed form** — express the result in terms of named special functions (`polygamma`, `erfc` at complex argument, etc.) and verify it matches to machine precision. Print the discrepancy explicitly.
+
+**Common reduction techniques used in this repo:**
+- IBP to strip off a special-function factor (erf, arctan, ln) and expose a Gaussian or exponential kernel
+- Expanding a factor as a power series and integrating term-by-term, then identifying each term via a known integral identity
+- Completing the square to convert real exponentials to complex Gaussian form, then using `∫_a^∞ e^{-t²+ibt} dt = e^{-b²/4}·(√π/2) erfc(a - ib/2)`
+- Digamma reduction: `∫₀¹ t^{s-1}/(1+t) dt = ½[ψ((s+1)/2) - ψ(s/2)]`
+
+**Convergence acceleration:** for slowly converging alternating series, use iterated Aitken Δ² (not Euler transform — Euler requires monotonically decreasing terms).
