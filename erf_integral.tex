@@ -1,0 +1,107 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb}
+\usepackage{hyperref}
+
+\title{Evaluation of $\displaystyle I = \int_0^\infty e^{-x}\sin(x)\,\mathrm{erf}(x)\,dx$}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Integration by Parts}
+
+Let $u = \mathrm{erf}(x)$ and $dv = e^{-x}\sin(x)\,dx$. Then
+\[
+  du = \frac{2}{\sqrt{\pi}}\,e^{-x^2}\,dx.
+\]
+For $v$ we need $\int e^{-x}\sin(x)\,dx$. A standard calculation gives
+\[
+  v = -\frac{e^{-x}(\sin x + \cos x)}{2}.
+\]
+The boundary terms $[u\,v]_0^\infty$ vanish: at $x=0$, $\mathrm{erf}(0)=0$; at $x\to\infty$, $e^{-x}\to 0$.
+Integrating by parts therefore yields
+\[
+  I = \int_0^\infty \frac{2}{\sqrt{\pi}}\,e^{-x^2}\cdot\frac{e^{-x}(\sin x + \cos x)}{2}\,dx
+    = \frac{1}{\sqrt{\pi}}\int_0^\infty e^{-x^2-x}(\sin x + \cos x)\,dx.
+\]
+
+\section{Completing the Square}
+
+Write
+\[
+  -x^2 - x = -\!\left(x + \tfrac{1}{2}\right)^2 + \tfrac{1}{4},
+  \qquad\text{so}\qquad
+  e^{-x^2-x} = e^{1/4}\,e^{-(x+1/2)^2}.
+\]
+Substituting $t = x + \tfrac{1}{2}$ (so the lower limit shifts from $0$ to $\tfrac{1}{2}$):
+\[
+  I = \frac{e^{1/4}}{\sqrt{\pi}}\int_{1/2}^\infty e^{-t^2}
+      \bigl[\sin\!\left(t-\tfrac{1}{2}\right)+\cos\!\left(t-\tfrac{1}{2}\right)\bigr]\,dt.
+\]
+Using the identity $\sin\theta + \cos\theta = \sqrt{2}\sin\!\left(\theta+\tfrac{\pi}{4}\right)$:
+\[
+  I = \frac{\sqrt{2}\,e^{1/4}}{\sqrt{\pi}}\int_{1/2}^\infty e^{-t^2}\sin\!\left(t + \frac{\pi}{4} - \frac{1}{2}\right)\,dt.
+\]
+
+\section{Complex Gaussian Integral}
+
+Set $\alpha = \frac{\pi}{4} - \frac{1}{2}$ and write
+\[
+  \sin(t+\alpha) = \mathrm{Im}\!\left[e^{i(t+\alpha)}\right],
+\]
+so
+\[
+  \int_{1/2}^\infty e^{-t^2}\sin(t+\alpha)\,dt
+  = \mathrm{Im}\!\left[e^{i\alpha}\int_{1/2}^\infty e^{-t^2+it}\,dt\right].
+\]
+Complete the square in the exponent of the inner integral:
+\[
+  -t^2 + it = -\!\left(t - \frac{i}{2}\right)^2 - \frac{1}{4},
+\]
+giving
+\[
+  \int_{1/2}^\infty e^{-t^2+it}\,dt
+  = e^{-1/4}\int_{1/2}^\infty e^{-(t-i/2)^2}\,dt
+  = e^{-1/4}\cdot\frac{\sqrt{\pi}}{2}\,\mathrm{erfc}\!\left(\tfrac{1}{2}-\tfrac{i}{2}\right),
+\]
+where the last equality follows from the standard Faddeeva / complex-argument erfc identity
+\[
+  \int_a^\infty e^{-(t-z_0)^2}\,dt = \frac{\sqrt{\pi}}{2}\,\mathrm{erfc}(a - z_0),
+  \qquad z_0 = \tfrac{i}{2}.
+\]
+
+\section{Closed Form}
+
+Substituting back:
+\begin{align*}
+  I &= \frac{\sqrt{2}\,e^{1/4}}{\sqrt{\pi}}\cdot
+       \mathrm{Im}\!\left[e^{i\alpha}\cdot e^{-1/4}\cdot\frac{\sqrt{\pi}}{2}
+       \,\mathrm{erfc}\!\left(\tfrac{1}{2}-\tfrac{i}{2}\right)\right] \\[6pt]
+    &= \frac{\sqrt{2}\,e^{1/4}}{\sqrt{\pi}}\cdot\frac{\sqrt{\pi}}{2}\,e^{-1/4}\cdot
+       \mathrm{Im}\!\left[e^{i\alpha}\,\mathrm{erfc}\!\left(\tfrac{1}{2}-\tfrac{i}{2}\right)\right] \\[6pt]
+    &= \frac{1}{\sqrt{2}}\,\mathrm{Im}\!\left[e^{i(\pi/4-1/2)}\,\mathrm{erfc}\!\left(\tfrac{1}{2}-\tfrac{i}{2}\right)\right].
+\end{align*}
+Here $\mathrm{erfc}(z) = 1 - \mathrm{erf}(z)$ is the complementary error function evaluated at the
+complex argument $z = \tfrac{1}{2} - \tfrac{i}{2}$, which \texttt{scipy.special.erf} supports directly.
+
+\section{Series Expansion}
+
+Returning to the IBP form and expanding $e^{-x} = \sum_{k=0}^\infty (-1)^k x^k / k!$:
+\[
+  I = \frac{1}{\sqrt{\pi}}\sum_{k=0}^\infty \frac{(-1)^k}{k!}\,a_k,
+  \qquad
+  a_k = \int_0^\infty t^k\,e^{-t^2}(\sin t + \cos t)\,dt.
+\]
+The moments $a_k$ grow only sub-factorially (bounded by $\sqrt{2}\,\Gamma\!\left(\frac{k+1}{2}\right)/2$),
+so $a_k/k!$ decays super-exponentially and the series converges extremely fast.
+
+For slowly converging alternating partial-sum sequences, iterated Aitken $\Delta^2$ acceleration is applied.
+Starting from partial sums $s_0, s_1, s_2, \ldots$, each Aitken pass replaces consecutive triples
+$(s_n, s_{n+1}, s_{n+2})$ with
+\[
+  \hat{s}_n = s_n - \frac{(s_{n+1}-s_n)^2}{s_{n+2}-2s_{n+1}+s_n}.
+\]
+Four passes from 20 raw terms suffice to reach machine precision.
+
+\end{document}
