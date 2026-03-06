@@ -84,3 +84,16 @@ Each integral script follows a three-layer structure:
 - Digamma reduction: `∫₀¹ t^{s-1}/(1+t) dt = ½[ψ((s+1)/2) - ψ(s/2)]`
 
 **Convergence acceleration:** for slowly converging alternating series, use iterated Aitken Δ² (not Euler transform — Euler requires monotonically decreasing terms).
+
+## Workflow for new integral scripts
+
+Work iteratively with the user:
+- Start by setting up only the direct `scipy.integrate.quad` numerical reference — nothing more.
+- Then follow the user's suggestions step by step: verify each intermediate equivalent form numerically before moving on.
+- Do not jump ahead to analytic reductions or closed forms without being asked.
+- Only use SymPy for exact answers when the user asks for it.
+
+Use the standard git/PR workflow when the work is complete:
+1. `/branch` — create a branch named after the integral
+2. `/create-pr` — push and open a PR
+3. `/merge-pr` — squash-merge into main
