@@ -5,6 +5,7 @@ Compute I = ∫₀¹ sin(πx) / (sin(πx)·Γ²(x) + π) dx via scipy.integrate.
 import numpy as np
 from scipy import integrate
 from scipy.special import gamma
+from sympy import integrate as sym_integrate, pi, simplify, sin, symbols
 
 
 def integrand(x):
@@ -58,8 +59,6 @@ print(f"  scipy.quad : {result5:.15f}  (est. error {error5:.2e})")
 print(f"\n  Discrepancy: {abs(result - result5):.2e}")
 
 # --- Exact answer via SymPy ---
-from sympy import symbols, sin, pi, integrate as sym_integrate, simplify
-
 x = symbols("x")
 exact = sym_integrate(sin(pi * x) / (2 * pi), (x, 0, 1))
 exact_simplified = simplify(exact)
