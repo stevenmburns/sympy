@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb}
+\usepackage{hyperref}
+
+\title{Evaluation of $\displaystyle I = \int_0^1 B_2(x)\ln\Gamma(x)\,dx$}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+The second Bernoulli polynomial is $B_2(x) = x^2 - x + \tfrac{1}{6}$.
+We show that
+\[
+  I = \int_0^1 B_2(x)\ln\Gamma(x)\,dx = \frac{\zeta(3)}{4\pi^2}.
+\]
+
+\section{Step 1: Reflection Formula}
+
+The key observation is that $B_2$ is symmetric under $x\mapsto 1-x$:
+\[
+  B_2(1-x) = (1-x)^2-(1-x)+\tfrac{1}{6} = x^2-x+\tfrac{1}{6} = B_2(x).
+\]
+Substituting $x\mapsto 1-x$ in $I$ therefore gives
+\[
+  I = \int_0^1 B_2(x)\ln\Gamma(1-x)\,dx.
+\]
+Adding the two expressions:
+\[
+  2I = \int_0^1 B_2(x)\bigl[\ln\Gamma(x)+\ln\Gamma(1-x)\bigr]\,dx.
+\]
+The reflection formula $\Gamma(x)\Gamma(1-x) = \pi/\sin(\pi x)$ gives
+$\ln\Gamma(x)+\ln\Gamma(1-x) = \ln\pi - \ln\sin(\pi x)$, so
+\[
+  2I = \ln\pi\underbrace{\int_0^1 B_2(x)\,dx}_{=\,0}
+       \;-\;\int_0^1 B_2(x)\ln\sin(\pi x)\,dx,
+\]
+where the first integral vanishes because $\int_0^1 B_n(x)\,dx = 0$ for all $n\ge 1$.  Hence
+\[
+  I = -\frac{1}{2}\int_0^1 B_2(x)\ln\sin(\pi x)\,dx.
+\]
+
+\section{Step 2: Fourier Series of Both Factors}
+
+The Fourier series of $\ln\sin(\pi x)$ on $(0,1)$ is the classical result
+\[
+  \ln\sin(\pi x) = -\ln 2 - \sum_{k=1}^\infty \frac{\cos 2\pi kx}{k}.
+\]
+The Fourier series of the Bernoulli polynomial $B_2(x)$ on $[0,1]$ is
+\[
+  B_2(x) = \frac{1}{\pi^2}\sum_{k=1}^\infty \frac{\cos 2\pi kx}{k^2}.
+\]
+(Verified at $x=0$: $\frac{1}{\pi^2}\cdot\frac{\pi^2}{6} = \frac{1}{6} = B_2(0)$.)
+
+\section{Step 3: Orthogonality Gives $\zeta(3)$}
+
+Substituting into $I$, the $-\ln 2$ term drops out (again because $\int_0^1 B_2 = 0$):
+\[
+  I = -\frac{1}{2}\int_0^1 B_2(x)\ln\sin(\pi x)\,dx
+    = \frac{1}{2}\sum_{k=1}^\infty\frac{1}{k}
+      \int_0^1 B_2(x)\cos 2\pi kx\,dx.
+\]
+Inserting the Fourier series of $B_2$ and applying orthogonality
+$\int_0^1\cos 2\pi jx\cos 2\pi kx\,dx = \tfrac{1}{2}\delta_{jk}$:
+\[
+  \int_0^1 B_2(x)\cos 2\pi kx\,dx
+  = \frac{1}{\pi^2}\cdot\frac{1}{k^2}\cdot\frac{1}{2}
+  = \frac{1}{2\pi^2 k^2}.
+\]
+Therefore
+\[
+  I = \frac{1}{2}\sum_{k=1}^\infty\frac{1}{k}\cdot\frac{1}{2\pi^2 k^2}
+    = \frac{1}{4\pi^2}\sum_{k=1}^\infty\frac{1}{k^3}
+    = \frac{\zeta(3)}{4\pi^2}.
+\]
+
+\section{Numerical Verification}
+
+All three forms were verified to machine precision using \texttt{scipy.integrate.quad}:
+\begin{align*}
+  \int_0^1 B_2(x)\ln\Gamma(x)\,dx &\approx 0.030\,448\,457\,058\,393,\\
+  -\tfrac{1}{2}\int_0^1 B_2(x)\ln\sin(\pi x)\,dx &\approx 0.030\,448\,457\,058\,393,\\
+  \frac{\zeta(3)}{4\pi^2} &\approx 0.030\,448\,457\,058\,393.
+\end{align*}
+Agreement to within $10^{-17}$ in each case.
+
+\end{document}

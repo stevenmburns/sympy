@@ -4,6 +4,7 @@ Compute I = ∫₂³ (x³+1)/(x³-1) dx via scipy.integrate.quad.
 
 import numpy as np
 from scipy import integrate
+from sympy import Rational, integrate as sym_integrate, simplify, symbols
 
 
 def integrand(x):
@@ -24,17 +25,19 @@ print("\nK = ∫₂³ [1 + 2/(x³-1)] dx")
 print(f"  scipy.quad : {result3:.15f}  (est. error {error3:.2e})")
 print(f"\n  Discrepancy: {abs(result - result3):.2e}")
 
+
 # Partial fraction decomposition: 1/(x³-1) = (1/3)/(x-1) - (1/3)(x+2)/(x²+x+1)
 # So: 1 + 2/(x³-1) = 1 + (2/3)/(x-1) - (2/3)(x+2)/(x²+x+1)
-pf = lambda x: 1 + (2 / 3) / (x - 1) - (2 / 3) * (x + 2) / (x**2 + x + 1)
+def pf(x):
+    return 1 + (2 / 3) / (x - 1) - (2 / 3) * (x + 2) / (x**2 + x + 1)
+
+
 result4, error4 = integrate.quad(pf, 2, 3)
 print("\nL = ∫₂³ [1 + (2/3)/(x-1) - (2/3)(x+2)/(x²+x+1)] dx")
 print(f"  scipy.quad : {result4:.15f}  (est. error {error4:.2e})")
 print(f"\n  Discrepancy: {abs(result - result4):.2e}")
 
 # --- Exact closed form via SymPy ---
-from sympy import symbols, integrate as sym_integrate, simplify, Rational
-
 x = symbols("x")
 f = 1 + Rational(2, 3) / (x - 1) - Rational(2, 3) * (x + 2) / (x**2 + x + 1)
 antideriv = sym_integrate(f, x)
